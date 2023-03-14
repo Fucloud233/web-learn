@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>每日一笑</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>    
+    </head>
+
+    <body>
+        <div id="app">
+            <h1>每日一笑</h1>
+            <button @click="addJokes" v-show="status">添加</button>
+            <button @click="subJokes" v-show="status">减少</button>
+            <button @click="getJokes" v-show="status">显示</button>
+            <button @click="clearJokes" v-show="status&&jokes.length!=0">清除</button>
+            <p v-show="!status">{{message}}</p>
+            <!-- <input type="text" v-model='jokesNum' @keyup.enter="getJokes" placeholder="请输入想要笑话的个数"> -->
+            <p>你想看到的笑话数: {{jokesNum}}</p>
+            
+            <ol>
+                <li v-for="joke in jokes">{{joke}}</li>
+            </ol>
+     
+        </div>
+
+        <script>
+            const {createApp} = Vue;
+            const jokeApp = createApp({
+                data(){
+                    return{
+                        jokesNum: 1,
+                        jokes: [],
+                        status: true, 
+                        message: "加载中",
+                    }
+                },
+                methods:{
+                    addJokes:function() {
+                        if(this.jokesNum<5){
+                            this.jokesNum++
+                        }
+                        else {
+                            alert("人不能太贪心喔！")
+                        }
+                    },
+                    subJokes:function() {
+                        if(this.jokesNum>1) {
+                            this.jokesNum--
+                        }
+                        else {
+                            alert("不讲笑话你要我干啥！")
+                        }
+                    },
+                    clearJokes:function() {
+                        this.jokes = {};
+                        this.jokesNum = 0;
+                    },
+                    getJokes:function(){
+                        let url = "https://autumnfish.cn/api/joke/list?num=" + this.jokesNum
+                        this.status = false
+                        axios.get(url)
+                        .then(this.setJokes, 
+                        function(err){
+                            alert(err);
+                        })
+                    },
+                    setJokes:function(response) {
+                        console.log('Status: ' + response.statusText);
+                        this.jokes = response["data"]["data"];
+                        this.status = true
+                    }
+                }
+            })
+
+            jokeApp.mount('#app');
+        </script>
+    </body>
+</html>
