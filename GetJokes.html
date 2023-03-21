@@ -7,21 +7,27 @@
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>    
         
         <style>
-            .text{
+
+            body, html{
+                background-color: #1e1e1e;
+                height: 100%;
+
+                margin: 0;
+                padding: 0;
+            }
+
+            #app{
+                background-color: white;
+                height: 100%;
+                
+                margin-top: 20px;
+                margin-bottom: 20px;
                 margin-left: 20%;
                 margin-right: 20%;
-                padding-left: 10px;
-                padding-right: 10px;
-                height: auto;
-                border-left: 2px solid black;
-                border-right: 2px solid black;
 
-
-                /* background-color: grey; */
-                /* width: 500px; */
-                /* border: 1px solid black; */
                 padding: 10px;
-                box-shadow: 2px;
+
+                border-radius: 10px;
             }
 
             .preview{
@@ -54,7 +60,7 @@
     </head>
 
     <body>
-        <div id="app" class="text">
+        <div id="app">
             <!-- <img src="https://photo.tuchong.com/2469672/f/300351752.jpg" alt="今天也要开心呀！" class="preview"><br> -->
             <h1 style="text-align: center;">每日一笑</h1>
             <!-- <input type="text" v-model='jokesNum' @keyup.enter="getJokes" placeholder="请输入想要笑话的个数"> -->
