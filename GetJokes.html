@@ -9,7 +9,7 @@
         <style>
 
             body, html{
-                background-color: #1e1e1e;
+                background-color: #303030;
                 height: 100%;
 
                 margin: 0;
@@ -27,34 +27,32 @@
 
                 padding: 10px;
 
-                border-radius: 10px;
+                border-radius: 9px;
             }
 
-            .preview{
-                width: 50%;
-                height: 50%;
-                position: relative;
-                left: 50%;
-                /* right: 50%; */
+            .btnBox{
+                display: inline;
+                text-align: center;
+                padding: 0px;
+                margin: 0;
+                height: 100%;
             }
 
             .ctlBtn{
                 margin-left:5px;
                 margin-right:5px;
 
-                width: 20px;
-                height: 20px;
-
-
-                background-color: white;
-                border: 2px solid  black;
-
-                border-radius: 5px;
+                min-height: 1.5em;
+                min-width: 1.5em;
+                color: white;
+                background-color: black;
                 
+                border: 0 ;
+                border-radius: 3px;
             }
             .ctlBtn:hover {
-                /* color: red; */
-                background-color: grey;
+                background-color: rgb(41, 41, 41);
+                /* background-color: grey; */
             }
         </style>
     </head>
@@ -66,14 +64,18 @@
             <!-- <input type="text" v-model='jokesNum' @keyup.enter="getJokes" placeholder="请输入想要笑话的个数"> -->
             <p style="text-align: center;"> 
                 <span v-show="status&&!isShow">你想看到的笑话数: </span>
-                <button @click="subJokes" v-show="status&&!isShow" class="ctlBtn">-</button>
-                <span v-show="status&&!isShow">{{jokesNum}}</span>
-                <button @click="addJokes" v-show="status&&!isShow" class="ctlBtn">+</button>
-                <button @click="getJokes" v-show="status&&!isShow">显示</button>
+
+                <span class="btnBox">
+                    <button @click="subJokes" v-show="status&&!isShow" class="ctlBtn">-</button>
+                    <span v-show="status&&!isShow">{{jokesNum}}</span>
+                    <button @click="addJokes" v-show="status&&!isShow" class="ctlBtn">+</button>
+                </span>
+                
+                <button @click="getJokes" v-show="status&&!isShow" class="ctlBtn" style="width: 4.5em;">display</button>
                 <span v-show="!status">{{message}}</span>
                 
                 <span v-show="isShow">已显示{{jokesNum}}条笑话 </span>
-                <button @click="clearJokes" v-show="status&&isShow">清除</button>
+                <button @click="clearJokes" v-show="status&&isShow" class="ctlBtn" style="width: 4.5em;">clear</button>
             </p>
             
             <ol>
