@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Show Page</title> 
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>    
+    <style>
+        .picture{
+            width:600px;
+            height: 100%;
+            /* display: inline-block; */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .gallery {
+            width:600px;
+            height: 100%;
+            padding: 10px;
+        }
+
+        .gallery:hover {
+            border: 1px solid grey;
+        }
+
+        .description{
+            text-align: center;
+            width:600px;
+        }
+        .btn{
+            margin-right:0%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Picture show</h1>
+    <div id="pic">
+        <div class="gallery">
+            <a :href="imgSrc">
+                <img :src="imgSrc" alt="Picture" class="picture"><br>
+            </a>
+            <div class='description'>{{ index }}</div>
+        </div>
+
+        <!-- <p>{{ imgSrc }}</p> -->
+       <input type="button" value="<" @click="updatePic(-1)" v-show='index>0'>
+       <input type="button" value=">" @click="updatePic(1)" v-show='index<8' class="btn">
+    </div>
+        
+       
+    <script>
+        const { createApp } = Vue
+
+        const pictureShow = createApp({
+            data(){
+                return {
+                    dir: "./JK/",
+                    index: 0,
+                    imgSrc: "./JK/0.jpg",
+                    max_num: 8,
+                }   
+            },
+            methods:{
+                updatePic:function(direct) {
+                    this.index += direct;
+                    this.imgSrc = this.dir + this.index + ".jpg";
+                },
+            }
+        })
+
+        pictureShow.mount('#pic')
+    </script>
+</body>
+</html>
