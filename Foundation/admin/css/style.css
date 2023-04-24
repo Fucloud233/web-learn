@@ -1,0 +1,77 @@
+body {
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+}
+main {
+  overflow-y: auto;
+}
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+li {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+}
+a {
+  display: block;
+  color: hsla(0,0%,100%,.65);
+  text-decoration: none;
+  
+  padding-left: 1em;
+  margin-block: 10px;
+}
+a:hover {
+  color:white;
+}
+/* a {
+  background-color: #1890ff;
+} */
+h1 {
+  background-color: rgb(44, 44, 44);
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0.5em;
+  height: 2em;
+}
+aside {
+  /* position: absolute; */
+  min-width: 200px;
+  height: 100%;
+
+  /* padding: 1em; */
+
+  /* border-right:  1px solid #ededed; */
+  /* background: #36c; */
+  background: #001529;
+  margin:0;
+  /* flex: 1 0 10%; */
+}
+
+.wrapper {
+  display: flex;
+  height: 100%;
+}
+/* @media (max-width: 500px) {
+  .wrapper {
+    flex-direction: column-reverse;
+  }
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+} */
+
+/* 控制文本 */
+.wrapper_inner {
+  margin: 2em;
+  /* width: 90%; */
+  /* margin: 0px auto; */
+}
