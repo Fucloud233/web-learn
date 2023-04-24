@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+    <title>Onedrive Connection Test</title>
+    <script src="auth.js"></script>
+    <script>
+        function signInToOneDrive() {
+            // 定义一个map用于存储进行验证的信息
+            var appInfo = {
+                // 客户端的id
+                "clientId": "fe770e5b-cd99-4b04-818f-df663f07102b",
+                // 重定向之后的页面 返回的信息会在后面以query追加
+                "redirectUri": "http://localhost:9999/callback.html",
+                // 申请的范围
+                "scopes": "user.read files.read files.read.all sites.read.all",
+                // 使用microsoft graph方法 来验证服务器
+                "authServiceUri": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+            }
+            
+            // 设置上述AppInfo
+            setAppInfo(appInfo)
+            // 进行验证
+            authorize();
+        }
+
+        function signOut() {
+            logoutOfAuth();
+
+            location.reload();
+        }
+        
+        function showCustomLoginButton(show) {
+            var loginBtn = document.getElementById("login-div")
+            loginBtn.style.display = show ? "block" : "none";
+
+            var logoutBtn = document.getElementById("logout-div")
+            logoutBtn.style.display = show ? "none" : "block";
+        }
+
+    </script>
+</head>
+<body>
+    <div id="login-div">
+        <a href="#" id="loginText" onclick="signInToOneDrive()">Sign in</a>
+    </div>
+    <div id="logout-div" style="display: none;">
+        <a href="#" id="logoutText" onclick="signOut()">Sign out</a>
+    </div>
+
+    <script>
+        function authenticated(token, authWindow) {
+            if(!token) {
+                alert("Error signing in");
+                return;
+            }
+
+            // 对页面进行处理
+            if(window) {
+                removeLoginButton();
+                authWindow.close();
+            }
+            
+            // todo 对ondrive进行操作
+        }
+    </script>
+</body>
