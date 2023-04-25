@@ -65,11 +65,12 @@
                 authWindow.close();
             }
             
-            // todo 对ondrive进行操作
+            // todo 添加主动发送
             // var getBtn = document.createElement("button")
             // getBtn.onclick = authenticated
             // getBtn.innerHTML("Get")
 
+            // 对onedrive文件的读取
             var root = "https://graph.microsoft.com/v1.0/me/drive/root";
             // var path = ":/Temp/test.txt:";
             // var path = ":/Temp:/children";
@@ -92,6 +93,7 @@
                         
                         var children = data.children || data.value;
                         // 将children对象转换成列表
+                        // https://www.javascripttutorial.net/object/convert-an-object-to-an-array-in-javascript/
                         children = Object.values(children)
                         if(children && children.length > 0 ) {
                             // 创建用于存储文件路径的列表
@@ -101,6 +103,7 @@
                             document.getElementById("items-div").appendChild(itemsList);
                             
                             // 再将每个文件路径添加到上述链表
+                            // https://www.w3schools.com/jsref/jsref_foreach.asp
                             children.forEach(item => {
                                 var itemText = document.createElement('li')
                                 itemText.innerText = itemText.textContent = item.name;
