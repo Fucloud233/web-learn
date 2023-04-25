@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+    <title>ajax test</title>
+</head>
+
+<body>
+    <button id="ajaxBtn" type="button">Make a request</button>
+    <script>
+        let httpRequest;
+        document  
+            .getElementById("ajaxBtn")
+            .addEventListener("click", makeRequest);
+
+        function makeRequest() {
+            httpRequest = new XMLHttpRequest();
+
+            if(!httpRequest) {
+                alert("Give up :( Cannot create an XMLHTTP instance");
+                return false;
+            }
+            
+            // 当请求发生改变的时候 调用一下程序
+            httpRequest.onreadystatechange = alertContents;
+            // 添加GET请求
+            httpRequest.open("GET", "https://autumnfish.cn/api/joke/list?num=1");
+            // 然后发送请求
+            httpRequest.send();
+        }
+
+        // 显示信息
+        function alertContents() {
+            if(httpRequest.readyState === XMLHttpRequest.DONE) {
+                // 当消息成功接收的时候 显示笑话的内容
+                if(httpRequest.status === 200) {
+                    var result = JSON.parse(httpRequest.responseText)
+                    alert(result["data"][0])
+                } else {
+                    alert("There was a problem with the request.")
+                }
+            }
+        }
+        
+    </script>
+</body>
