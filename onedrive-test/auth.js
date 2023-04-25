@@ -72,8 +72,6 @@ function authCallback() {
 
     // 如果存在token 说明认证成功
     if (token) {
-
-        
         // 保存token
         setCookie(token, expiry);
         window.opener.authenticated(token, window);
