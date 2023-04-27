@@ -54,9 +54,14 @@
     <div id="content-div">
         <div id="items-div"></div>
     </div>
-    
+
     <script>
+        // 启动odauth.js中的验证程序
         onedriveAuth()
+
+        window.addEventListener("hashchange", ()=>{
+            onedriveAuth(true);
+        });
         
         function authenticated(token, authWindow) {
             if(!token) {
@@ -65,22 +70,27 @@
             }
 
             // 对页面进行处理
+            removeLoginButton();
             if(authWindow) {
-                removeLoginButton();
                 authWindow.close();
             }
             
-            // todo 添加主动发送
-            // var getBtn = document.createElement("button")
-            // getBtn.onclick = authenticated
-            // getBtn.innerHTML("Get")
-
             // 对onedrive文件的读取
             var root = "https://graph.microsoft.com/v1.0/me/drive/root";
             // var path = ":/Temp/test.txt:";
             // var path = ":/Temp:/children";
-            var path = "/children"
-            var url = root + escape(path);
+            // var path = "/children"
+            var path = ""
+            var beforePath = ""
+            var afterPath = ""
+            
+            if (window.location.hash.length > 1) {
+                path = window.location.hash.substr(1)
+                beforePath = afterPath = ":"
+            }
+
+            var url = root + beforePath + path + afterPath + "/children";
+            // console.log(url)
 
             // 使用ajax方法 
             // https://www.geeksforgeeks.org/how-to-make-ajax-call-from-javascript/#
@@ -94,7 +104,13 @@
                 accept: "application/json;odata.metadata=none",
                 success: function (data) {
                     if(data) {
-                        console.log("ok")
+                        // console.log("ok")
+
+                        // 清空列表中的所有内容
+                        var items = document.getElementById("items-div")
+                        while(items.lastChild) {
+                            items.removeChild(items.lastChild);
+                        }
                         
                         var children = data.children || data.value;
                         // 将children对象转换成列表
@@ -107,14 +123,38 @@
                             itemsList.id = "items-list";
                             document.getElementById("items-div").appendChild(itemsList);
                             
+                            // 添加返回选项
+                            if(path) 
+                                children.push({"name": ""});
+                            
                             // 再将每个文件路径添加到上述链表
                             // https://www.w3schools.com/jsref/jsref_foreach.asp
                             children.forEach(item => {
                                 var itemText = document.createElement('li')
-                                itemText.innerText = itemText.textContent = item.name;
+                                // 创建访问的超链接
+                                var link = document.createElement('a')
+
+                                if (item.name) {
+                                    link.innerText = item.name
+                                    loadedForHash = "#" + path  + "/" + encodeURIComponent(item.name) 
+                                }
+                                else {
+                                    // 用来返回上一页
+                                    link.innerText = "/"
+                                    loadedForHash = "#" + path.substring(0, path.lastIndexOf("/"))
+                                }
+
+                                link.href = loadedForHash;
+                                link.onclick = () => {
+                                    // 修改当前url hash值
+                                    window.location = link.href;
+                                    // 由于设置hashchange的监听 所以这里不需要重复调用
+                                    // onedriveAuth(true);
+                                }
 
                                 // https://www.w3schools.com/jsref/met_node_appendchild.asp
-                                document.getElementById("items-list").appendChild(itemText);
+                                itemText.appendChild(link);
+                                items.appendChild(itemText);
                             });
                         }
                     }
