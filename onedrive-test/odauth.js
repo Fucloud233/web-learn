@@ -1,5 +1,29 @@
 var curAppInfo = null;
 
+
+// 相当于全局控制函数
+
+function onedriveAuth(click) {
+    // 确保使用https连接
+    if (window.location.protocol != "https:" && window.location.protoco != "file:" && window.location.hostname != "localhost") {
+            window.location.href = "https:" +  window.location.href.substring(window.location.protocol.length)
+    }
+
+    var token = getTokenFromCookie();
+    // 如果rookie中存在验证的话 
+    if (token) {
+        authenticated(token);
+    }
+    // 如果是点击则进行验证
+    else if (click) {
+        authorize();
+    }
+    // 如果啥也没有 则显示登陆按钮
+    else {
+        showLoginButton();
+    }
+}
+
 function getAppInfo() {
     if(curAppInfo)
         return curAppInfo;
@@ -120,6 +144,31 @@ function clearCookie() {
     var expiration = new Date();
     var cookie = "odauth=; path=/; expires=" + expiration.toUTCString();
     document.cookie = cookie;
+}
+
+// 从cookie中得到token
+function getTokenFromCookie() {
+    var cookies = document.cookie;
+    var name = "odauth=";
+    
+    // 记录开始下标
+    var start = cookies.indexOf(name);
+
+    // 判断是否存在odauth=
+    if (start < 0) {
+        return ""
+    }
+    
+    start += name.length;
+    // 记录结束下标
+    var end = cookies.indexOf(';', start);
+
+    if(end < 0) {
+        end = cookies.length
+    }
+    
+    var value = cookies.substring(start, end);
+    return value;
 }
 
 function showLoginButton() {
