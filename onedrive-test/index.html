@@ -15,7 +15,9 @@
                 // 重定向之后的页面 返回的信息会在后面以query追加
                 "redirectUri": "http://localhost:9999/callback.html",
                 // 申请的范围
-                "scopes": "user.read files.read files.read.all sites.read.all",
+                // "scopes": "user.read files.read files.read.all sites.read.all",
+                // 使得应用可以读写文件
+                "scopes": "Files.ReadWrite Files.ReadWrite.All",
                 // 使用microsoft graph方法 来验证服务器
                 "authServiceUri": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
             }
@@ -50,12 +52,21 @@
     <div id="logout-div" style="display: none;">
         <a href="#" id="logoutText" onclick="signOut()">Sign out</a>
     </div>
+    
+    <div>
+        <span>请输入要创建的文件夹</span>
+        <input type="text" id="folder_input">
+        <button onclick="mkdir()">确认</button>
+    </div>
+
     <!-- 显示内容 -->
     <div id="content-div">
         <div id="items-div"></div>
     </div>
 
     <script>
+        var base_url = "https://graph.microsoft.com/v1.0/me/drive/root";
+
         // 启动odauth.js中的验证程序
         onedriveAuth()
 
@@ -76,7 +87,7 @@
             }
             
             // 对onedrive文件的读取
-            var root = "https://graph.microsoft.com/v1.0/me/drive/root";
+            var root = base_url;
             // var path = ":/Temp/test.txt:";
             // var path = ":/Temp:/children";
             // var path = "/children"
@@ -90,7 +101,7 @@
             }
 
             var url = root + beforePath + path + afterPath + "/children";
-            // console.log(url)
+            // console.log(root)
 
             // 使用ajax方法 
             // https://www.geeksforgeeks.org/how-to-make-ajax-call-from-javascript/#
@@ -116,7 +127,10 @@
                         // 将children对象转换成列表
                         // https://www.javascripttutorial.net/object/convert-an-object-to-an-array-in-javascript/
                         children = Object.values(children)
-                        if(children && children.length > 0 ) {
+
+                        // 保证空文件夹能够进入
+                        // if(children && children.length > 0 ) {
+                        if(true) {
                             // 创建用于存储文件路径的列表
                             var itemsList = document.createElement('ll')
                             itemsList.innerText = "文件目录:";
@@ -163,6 +177,32 @@
                     console.log(`Error ${error.responseText}`)
                 }
             })
+        }
+    
+        function mkdir() {
+            var folder_name = document.getElementById("folder_input").value;
+            var url = base_url + '/children';
+            var token = getTokenFromCookie();
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                headers: { "Authorization": "Bearer " + token },
+                // 当文件冲突时 处理的方式
+                // js文件的发送方式
+                data: '{\
+                    "name": "' + folder_name + '",\
+                    "folder": { },\
+                    "@microsoft.graph.conflictBehavior": "rename"\
+                }'
+            }).done(function(responseText) {
+                console.log(responseText);
+            }).fail(function(err) {
+                console.log(err.responseText)
+            })
+
+            onedriveAuth();
         }
     </script>
 </body>
